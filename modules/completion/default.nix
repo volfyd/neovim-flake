@@ -144,7 +144,7 @@ in {
             c = cmp.mapping.close(),
           }),
           ['<CR>'] = cmp.mapping.confirm({
-            select = true,
+            select = false,
           }),
           ['<Tab>'] = cmp.mapping(function (fallback)
             if cmp.visible() then
