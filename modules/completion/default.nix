@@ -166,8 +166,11 @@ in {
           end, { 'i', 's' })
         },
         completion = {
-          completeopt = 'menu,menuone,noinsert',
+          autocomplete = false,
         },
+        -- completion = {
+        --   completeopt = 'menu,menuone,noinsert',
+        -- },
         formatting = {
           format =
       ${
