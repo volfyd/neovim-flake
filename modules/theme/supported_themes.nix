@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 with lib;
 with builtins; let
@@ -24,7 +23,8 @@ with builtins; let
 
   cfg = config.vim.theme;
   style = cfg.style;
-in {
+in
+{
   options.vim.theme = {
     supportedThemes = mkOption {
       description = "Supported themes";
@@ -41,17 +41,19 @@ in {
         }
         require('onedark').load()
       '';
-      styles = ["dark" "darker" "cool" "deep" "warm" "warmer"];
+      styles = [ "dark" "darker" "cool" "deep" "warm" "warmer" ];
       defaultStyle = "dark";
     };
 
     tokyonight = {
       setup = ''
         -- need to set style before colorscheme to apply
-        vim.g.tokyonight_style = '${cfg.style}'
+        require("tokyonight").setup({
+          style = "${cfg.style}",
+        })
         vim.cmd[[colorscheme tokyonight]]
       '';
-      styles = ["day" "night" "storm"];
+      styles = [ "day" "night" "storm" "moon" ];
       defaultStyle = "night";
     };
 
@@ -64,7 +66,7 @@ in {
         -- setup must be called before loading
         vim.cmd.colorscheme "catppuccin"
       '';
-      styles = ["latte" "frappe" "macchiato" "mocha"];
+      styles = [ "latte" "frappe" "macchiato" "mocha" ];
       defaultStyle = "mocha";
     };
 
@@ -84,12 +86,10 @@ in {
     gruvbox = {
       setup = ''
         -- gruvbox theme
-        require('gruvbox').setup {
-          style = "${cfg.style}"
-        }
-        require('gruvbox').load()
+        vim.o.background = "${cfg.style}"
+        vim.cmd.colorscheme "gruvbox"
       '';
-      styles = ["dark" "light"];
+      styles = [ "dark" "light" ];
       defaultStyle = "dark";
     };
   };

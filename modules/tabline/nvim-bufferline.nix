@@ -1,13 +1,13 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 with lib;
 with builtins; let
   cfg = config.vim.tabline.nvimBufferline;
-in {
+in
+{
   options.vim.tabline.nvimBufferline = {
     enable = mkEnableOption "nvim-bufferline-lua";
   };
@@ -22,7 +22,8 @@ in {
           end
         '';
       };
-    in {
+    in
+    {
       vim.startPlugins = [
         (assert config.vim.visuals.nvimWebDevicons.enable == true; "nvim-bufferline-lua")
         "bufdelete-nvim"
@@ -58,7 +59,7 @@ in {
                 indicator_icon = '▎',
                 style = 'icon',
               },
-              buffer_close_icon = '',
+              buffer_close_icon = '󰅖',
               modified_icon = '●',
               close_icon = '',
               left_trunc_marker = '',
