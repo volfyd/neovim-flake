@@ -165,6 +165,9 @@ in
           },
           add_trailing = ${boolToString cfg.trailingSlash},
           group_empty = ${boolToString cfg.groupEmptyFolders},
+          icons = {
+            git_placement = "signcolumn"
+          },
         },
         actions = {
           open_file = {
