@@ -47,7 +47,7 @@ in
 
     (mkIf cfg.lsp.enable {
       vim.lsp.lspconfig.enable = true;
-      vim.lsp.lspconfig.sources.zig-lsp = ''
+      vim.lsp.lspconfig.sources.zig-lsp = /* lua */ ''
         lspconfig.zls.setup {
           capabilities = capabilities,
           on_attach=default_on_attach,
@@ -55,7 +55,7 @@ in
           settings = {
             ["zls"] = {
               zig_exe_path = "${cfg.lsp.zigPackage}/bin/zig",
-              zig_lib_path = "${cfg.lsp.zigPackage}/lib/zig",
+              zig_lib_path = "${cfg.lsp.zigPackage}/lib/std",
             }
           }
         }

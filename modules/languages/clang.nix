@@ -11,12 +11,23 @@ with builtins; let
   servers = {
     ccls = {
       package = [ "ccls" ];
-      lspConfig = ''
+      lspConfig = /* lua */ ''
         lspconfig.ccls.setup{
           capabilities = capabilities;
           on_attach=default_on_attach;
           cmd = {"${nvim.languages.commandOptToCmd cfg.lsp.package "ccls"}"};
-          ${optionalString (cfg.lsp.opts != null) "init_options = ${cfg.lsp.cclsOpts}"}
+          ${optionalString (cfg.lsp.opts != null) "init_options = ${cfg.lsp.opts}"}
+        }
+      '';
+    };
+
+    clangd = {
+      package = [ "clang-tools" ];
+      lspConfig = lib.warnIf (cfg.lsp.opts != null) "clangd does not use lsp.opts" /* lua */ ''
+        lspconfig.ccls.setup{
+          capabilities = capabilities;
+          on_attach=default_on_attach;
+          cmd = {"${nvim.languages.commandOptToCmd cfg.lsp.package "clangd"}"};
         }
       '';
     };
@@ -69,7 +80,7 @@ in
         enable = mkOption {
           description = "Enable support for extra ccls extensions through ccls.nvim";
           default = cfg.lsp.server == "ccls";
-          defaultText = nvim.nmd.literalAsciiDoc ''`config.vim.languages.clang.lsp.server == "ccls"`'';
+          defaultText = literalExpression ''config.vim.languages.clang.lsp.server == "ccls"'';
         };
       };
     };
@@ -99,7 +110,7 @@ in
 
         vim.startPlugins = [ "ccls-nvim" ];
 
-        vim.luaConfigRC.ccls-nvim = nvim.dag.entryAnywhere ''
+        vim.luaConfigRC.ccls-nvim = nvim.dag.entryAnywhere /* lua */ ''
           require("ccls").setup({})
         '';
       })

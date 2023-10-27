@@ -4,7 +4,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     # For generating documentation website
-    nmd.url = "gitlab:rycee/nmd";
+    nmd.url = "sourcehut:~rycee/nmd";
     nmd.flake = false;
 
     # Language server (use master instead of nixpkgs)
@@ -12,7 +12,7 @@
     rnix-lsp.inputs.nixpkgs.follows = "flake-utils";
     rnix-lsp.inputs.utils.follows = "flake-utils";
 
-    nil.url = "github:jordanisaacs/nil";
+    nil.url = "github:oxalica/nil";
     nil.inputs.nixpkgs.follows = "nixpkgs";
     nil.inputs.flake-utils.follows = "flake-utils";
 
@@ -87,6 +87,9 @@
 
     plugin-telescope-file-browser.url = "github:nvim-telescope/telescope-file-browser.nvim";
     plugin-telescope-file-browser.flake = false;
+
+    plugin-telescope-live-grep-args.url = "github:nvim-telescope/telescope-live-grep-args.nvim";
+    plugin-telescope-live-grep-args.flake = false;
 
     # Filetrees
     plugin-nvim-tree-lua.url = "github:kyazdani42/nvim-tree.lua";
@@ -196,6 +199,10 @@
     plugin-glow-nvim.url = "github:ellisonleao/glow.nvim";
     plugin-glow-nvim.flake = false;
 
+    # SCNvim
+    plugin-scnvim.url = "github:davidgranstrom/scnvim";
+    plugin-scnvim.flake = false;
+
     # Plenary (required by crates-nvim)
     plugin-plenary-nvim.url = "github:nvim-lua/plenary.nvim";
     plugin-plenary-nvim.flake = false;
@@ -208,6 +215,10 @@
 
     plugin-plantuml-previewer.url = "github:weirongxu/plantuml-previewer.vim";
     plugin-plantuml-previewer.flake = false;
+
+    # misc
+    plugin-vim-be-good.url = "github:ThePrimeagen/vim-be-good";
+    plugin-vim-be-good.flake = false;
   };
 
   outputs =
@@ -309,6 +320,7 @@
             vim.telescope = {
               enable = overrideable true;
               fileBrowser.enable = overrideable true;
+              liveGrepArgs.enable = overrideable true;
             };
             vim.git = {
               enable = overrideable true;

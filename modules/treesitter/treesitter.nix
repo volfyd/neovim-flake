@@ -17,7 +17,7 @@ in
     grammars = mkOption {
       type = with types; listOf package;
       default = [ ];
-      description = nvim.nmd.asciiDoc ''
+      description = ''
         List of treesitter grammars to install. For supported languages
         use the `vim.languages.<language>.treesitter.enable` option
       '';
@@ -38,7 +38,7 @@ in
       set nofoldenable
     '');
 
-    vim.luaConfigRC.treesitter = nvim.dag.entryAnywhere ''
+    vim.luaConfigRC.treesitter = nvim.dag.entryAnywhere /* lua */ ''
       require'nvim-treesitter.configs'.setup {
         highlight = {
           enable = true,

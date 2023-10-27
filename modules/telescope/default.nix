@@ -20,9 +20,51 @@ in
         type = types.bool;
       };
     };
+
+    liveGrepArgs = {
+      enable = mkEnableOption "telescope live grep with args";
+      autoQuoting = mkOption {
+        default = true;
+        description = ''If the prompt value does not begin with ', " or - the entire prompt is treated as a single argument.'';
+        type = types.bool;
+
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
+    (mkIf cfg.liveGrepArgs.enable {
+      vim.startPlugins = [ "telescope-live-grep-args" ];
+
+      vim.nnoremap = {
+        "<leader>fa" = "<cmd> Telescope live_grep_args<CR>";
+      };
+
+      # Mappings currently broken: https://github.com/nvim-telescope/telescope-live-grep-args.nvim/issues/71
+      # mappings = {
+      #   i = {
+      #     ["<C-k>"] = lga_actions.quote_prompt(),
+      #     ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+      #   },
+      # },
+      vim.luaConfigRC.telescope-live-grep-args-setup = nvim.dag.entryBefore [ "telescope" ] /* lua */ ''
+        local lga_actions = require("telescope-live-grep-args.actions")
+
+        require("telescope").setup {
+          extensions = {
+            live_grep_args = {
+              auto_quoting = ${boolToString cfg.liveGrepArgs.autoQuoting},
+            }
+          }
+        }
+      '';
+
+      vim.luaConfigRC.telescope-live-grep-args-load = nvim.dag.entryAfter [ "telescope" ] /* lua */ ''
+        require("telescope").load_extension "live_grep_args"
+
+      '';
+
+    })
     (mkIf cfg.fileBrowser.enable {
       vim.startPlugins = [ "telescope-file-browser" ];
 
@@ -30,7 +72,7 @@ in
         "<leader>fd" = "<cmd> Telescope file_browser<CR>";
       };
 
-      vim.luaConfigRC.telescope-file-browser-setup = nvim.dag.entryBefore [ "telescope" ] ''
+      vim.luaConfigRC.telescope-file-browser-setup = nvim.dag.entryBefore [ "telescope" ] /* lua */ ''
         require("telescope").setup {
           extensions = {
             file_browser = {
@@ -40,7 +82,7 @@ in
         }
       '';
 
-      vim.luaConfigRC.telescope-file-browser-load = nvim.dag.entryAfter [ "telescope" ] ''
+      vim.luaConfigRC.telescope-file-browser-load = nvim.dag.entryAfter [ "telescope" ] /* lua */ ''
         require("telescope").load_extension "file_browser"
       '';
     })
@@ -80,7 +122,7 @@ in
         "<leader>fvx" = "<cmd> Telescope git_stash<CR>";
       };
 
-      vim.luaConfigRC.telescope = nvim.dag.entryAnywhere ''
+      vim.luaConfigRC.telescope = nvim.dag.entryAnywhere /* lua */ ''
         require("telescope").setup {
           defaults = {
             vimgrep_arguments = {
